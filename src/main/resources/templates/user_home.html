@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Home</title>
+    <style>
+        body {
+    min-height: 100vh;
+    background: url("https://i.postimg.cc/WpGKvTmy/img-18.webp");
+    background-size: cover; /* Ensures the background image covers the entire body */
+    background-attachment: fixed; /* Keeps the background image fixed while scrolling */
+    overflow-x: hidden;
+    opacity: 0.9;
+}
+
+
+header {  
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 90%;
+    padding: 30px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10000;
+}
+
+header .logo {
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 2em;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+header ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+header ul li {
+    list-style: none;
+    margin-left: 20px;
+}
+
+header ul li a {
+    text-decoration: none;
+    padding: 6px 15px;
+    color: #fff;
+    border-radius: 20px;
+}
+
+header ul li a:hover,
+header ul li a.active {
+    background: #fff;
+    color: #2b1055;
+}
+
+.welcome-message {
+    text-align: center;
+    margin-top: 100px;
+    color: white;
+    font-size: 24px;
+    
+    padding: 0.1px;
+    border-radius: 10px;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+    margin: 20px auto;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.create-post-button button {
+    background-color: rgba(255, 255, 255, 0.7);
+    color: #2b1055;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.blogs {
+    flex: 1;
+    padding: 0 20px;
+    
+    
+}
+
+.blog-list {
+    height: 500px; /* Set a fixed height for the container */
+    overflow-y: auto; /* Enable vertical scrolling */
+    position: relative;
+    list-style-type: none;
+    padding: 0;
+}
+
+.blog-card {
+    margin-bottom: 20px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.236);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    backdrop-filter: blur(200px);
+}
+
+.blog-title {
+    font-size: 30px;
+    margin-bottom: 10px;
+    text-align:center;
+}
+
+.blog-content {
+    text-align: center;
+}
+
+.blog-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    font-size: 12px;
+    color: white;
+}
+
+.accounts {
+    background: rgba(255, 255, 255, 0.236);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    backdrop-filter: blur(200px);
+    padding: 20px;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 200px;
+    margin: 0 auto;
+}
+
+.user-link {
+    display: block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.user-link:hover {
+    background-color: black;
+    color: white;
+}
+
+.btn{
+	text-align: center;
+}
+.btn button {
+    width:150px;
+    height: 40px;
+    border-radius: 10px;
+    background: #fff;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    display: inline-block;
+  }
+
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+}
+section {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+section img#stars {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    z-index: -1;
+}
+        
+    </style>
+    
+    
+</head>
+<section>
+
+<body>
+<header>
+    <a href="#" class="logo">Green Living</a>
+    <ul>
+        <li><a href="#" class="active">Home</a></li>
+        <li><a th:href="@{/user/my-blogs}">My Blogs</a></li>
+        <li><a th:href="@{/user/create}">Create</a></li>
+        <li> <a th:href="@{/user/profile}">Profile</a></li>
+        <li><a th:href="@{/user/login}">Logout</a></li>
+        
+    </ul>
+</header>
+    
+<div class="welcome-message">
+    <p>Welcome <span th:text="${loggedInUser.username}"></span>!</p>
+</div>
+<div class="container">
+   
+    
+    <div class="blogs">
+        <ul class="blog-list"> <!-- Added a class for styling purposes -->
+            <li th:each="blog : ${blogs}" class="blog-card">
+                <div class="blog-card-content">
+                    <h4 th:text="${blog.title}" class="blog-title"></h4>
+                    <p th:text="${blog.content}" class="blog-card"></p>
+                    <form action="/comment" method="post">
+                        <input type="hidden" name="authorid" th:value="${blog.authorid}" />
+                        <div class="btn">
+                        <button type="submit"> View More</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="blog-card-footer">
+                    <p th:text="${blog.blogtype}" class="blog-blogtype"></p>
+                    <p th:text="${blog.username}" class="blog-username"></p>
+                    <p th:text="${blog.date}" class="blog-date"></p>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="accounts">
+        <h2>Accounts</h2>
+        <div class="user-list">
+            <a th:each="user : ${users}" class="user-item">
+                <a th:unless="${user.username == loggedInUser.username}" th:href="@{/user/other-home/{username}(username=${user.username})}" th:text="${user.username}" class="user-link"></a>
+            </a>
+        </div>
+    </div>
+</div>
+
+</body>
+</section>
+</html>
